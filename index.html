@@ -634,6 +634,10 @@ src="https://www.facebook.com/tr?id=710376855144132&ev=PageView&noscript=1"/></n
 <script>
 (function(){
   var CHECKOUT='https://superprofile.bio/vp/master-the-art-of-selling---digital-sales-playbook';
+  /* carry the ad click id (fbclid) and UTM tags to checkout, so a Purchase on SuperProfile is credited to the ad */
+  try{ var inQ=new URLSearchParams(location.search), outQ=new URLSearchParams();
+    ['fbclid','utm_source','utm_medium','utm_campaign','utm_content','utm_term'].forEach(function(k){ if(inQ.get(k)) outQ.set(k,inQ.get(k)); });
+    if(outQ.toString()) CHECKOUT+='?'+outQ.toString(); }catch(e){}
   /* Analytics-ready: pushes to dataLayer, and calls gtag / Meta Pixel if you add them to the page. */
   function track(name, params){
     params=params||{};
