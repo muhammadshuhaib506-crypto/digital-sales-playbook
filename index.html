@@ -375,6 +375,23 @@ footer a{color:var(--char-2)}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.js .rv{opacity:1;transform:none}}
 </style>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '710376855144132');
+fbq('track', 'PageView');
+fbq('track', 'ViewContent', {content_name:'Digital Sales Playbook', content_ids:['digital-sales-playbook'], content_type:'product', value:299, currency:'INR'});
+</script>
+<noscript><img height="1" width="1" style="display:none" alt=""
+src="https://www.facebook.com/tr?id=710376855144132&ev=PageView&noscript=1"/></noscript>
+<!-- End Meta Pixel Code -->
 </head>
 <body>
 <script>document.documentElement.classList.add('js')</script>
@@ -622,12 +639,21 @@ footer a{color:var(--char-2)}
     params=params||{};
     try{ window.dataLayer=window.dataLayer||[]; window.dataLayer.push(Object.assign({event:name},params)); }catch(e){}
     try{ if(typeof window.gtag==='function') window.gtag('event',name,params); }catch(e){}
-    try{ if(typeof window.fbq==='function'){ if(name==='begin_checkout') window.fbq('track','InitiateCheckout',{value:299,currency:'INR'}); else if(name==='view_pricing') window.fbq('track','ViewContent',{content_name:'Pricing'}); } }catch(e){}
+    try{ if(typeof window.fbq==='function'){
+      if(name==='begin_checkout') window.fbq('track','InitiateCheckout',{content_name:'Digital Sales Playbook',content_ids:['digital-sales-playbook'],content_type:'product',num_items:1,value:299,currency:'INR',cta_location:params.cta_location},{eventID:'ic-'+Date.now()+'-'+Math.random().toString(36).slice(2,10)});
+      else if(name==='view_pricing') window.fbq('trackCustom','ViewPricing',{value:299,currency:'INR'});
+    } }catch(e){}
   }
   window.dspTrack=track;
   document.querySelectorAll('a.buy').forEach(function(a){
     a.setAttribute('href',CHECKOUT);
-    a.addEventListener('click',function(){ track('begin_checkout',{cta_location:a.getAttribute('data-cta'),value:299,currency:'INR',item_name:'Digital Sales Playbook'}); });
+    a.addEventListener('click',function(ev){
+      track('begin_checkout',{cta_location:a.getAttribute('data-cta'),value:299,currency:'INR',item_name:'Digital Sales Playbook'});
+      /* give the pixel a moment to send before leaving the page (plain left-click only) */
+      if(ev.button===0 && !ev.metaKey && !ev.ctrlKey && !ev.shiftKey && !ev.altKey && a.target!=='_blank'){
+        ev.preventDefault(); setTimeout(function(){ window.location.href=CHECKOUT; },300);
+      }
+    });
   });
   document.querySelectorAll('#faqlist details').forEach(function(d){ d.addEventListener('toggle',function(){ if(d.open) track('faq_open',{question:d.querySelector('summary').firstChild.textContent.trim()}); }); });
 
